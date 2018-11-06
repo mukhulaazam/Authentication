@@ -1,6 +1,7 @@
 <?php
 
-    use Slim\App;
+    use Slim\Slim;
+    use Noodlehaus\Config;
 
     session_cache_limiter(false);
     session_start();
@@ -13,12 +14,21 @@
 
     require INC_ROOT . '/vendor/autoload.php';
 
-    $app = new App();
+    $app = new Slim([
+        'mode' => file_get_contents(INC_ROOT . '/mode.php')
+    ]);
+    $app->configureMode($app->config('mode'), function() use ($app) {
+        $app->config = Config::load(INC_ROOT . "/app/config/{$app->mode}.php");
+    });
+    echo $app->config->get('db.driver');
+    // var_dump($app->config);
+
+    // echo $app->config('mode');
 
     // This is a test route
-    $app->get('/test', function() {
-        echo "Mamun";
-    });
+    // $app->get('/test', function() {
+    //     echo "Mamun";
+    // });
 
     // This Route for pass some value by the url and this did not work 
 

@@ -9,8 +9,8 @@ class ComposerStaticInit67b45e57623776761610bac5229ae36a
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
-        '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -28,7 +28,6 @@ class ComposerStaticInit67b45e57623776761610bac5229ae36a
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Component\\Translation\\' => 30,
             'Slim\\Views\\' => 11,
-            'Slim\\' => 5,
         ),
         'P' => 
         array (
@@ -83,10 +82,6 @@ class ComposerStaticInit67b45e57623776761610bac5229ae36a
         'Slim\\Views\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/views',
-        ),
-        'Slim\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/slim/slim/Slim',
         ),
         'Psr\\SimpleCache\\' => 
         array (
@@ -152,6 +147,10 @@ class ComposerStaticInit67b45e57623776761610bac5229ae36a
         ),
         'S' => 
         array (
+            'Slim' => 
+            array (
+                0 => __DIR__ . '/..' . '/slim/slim',
+            ),
             'SecurityLib' => 
             array (
                 0 => __DIR__ . '/..' . '/ircmaxell/security-lib/lib',
