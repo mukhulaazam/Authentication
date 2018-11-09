@@ -2,7 +2,7 @@
 
 namespace Noodlehaus\Exception;
 
-use Noodlehaus\Exception;
+use Exception;
 
 class EmptyDirectoryException extends Exception
 {

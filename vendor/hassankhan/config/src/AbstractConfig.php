@@ -3,7 +3,6 @@
 namespace Noodlehaus;
 
 use ArrayAccess;
-use Iterator;
 
 /**
  * Abstract Config class
@@ -14,7 +13,7 @@ use Iterator;
  * @link       https://github.com/noodlehaus/config
  * @license    MIT
  */
-abstract class AbstractConfig implements ArrayAccess, ConfigInterface, Iterator
+abstract class AbstractConfig implements ArrayAccess, ConfigInterface
 {
     /**
      * Stores the configuration data
@@ -28,14 +27,14 @@ abstract class AbstractConfig implements ArrayAccess, ConfigInterface, Iterator
      *
      * @var array
      */
-    protected $cache = [];
+    protected $cache = array();
 
     /**
      * Constructor method and sets default options, if any
      *
      * @param array $data
      */
-    public function __construct(array $data)
+    public function __construct($data)
     {
         $this->data = array_merge($this->getDefaults(), $data);
     }
@@ -50,7 +49,7 @@ abstract class AbstractConfig implements ArrayAccess, ConfigInterface, Iterator
      */
     protected function getDefaults()
     {
-        return [];
+        return array();
     }
 
     /**
@@ -62,11 +61,27 @@ abstract class AbstractConfig implements ArrayAccess, ConfigInterface, Iterator
      */
     public function get($key, $default = null)
     {
-        if ($this->has($key)) {
+        // Check if already cached
+        if (isset($this->cache[$key])) {
             return $this->cache[$key];
         }
 
-        return $default;
+        $segs = explode('.', $key);
+        $root = $this->data;
+
+        // nested case
+        foreach ($segs as $part) {
+            if (isset($root[$part])) {
+                $root = $root[$part];
+                continue;
+            } else {
+                $root = $default;
+                break;
+            }
+        }
+
+        // whatever we have is what we needed
+        return ($this->cache[$key] = $root);
     }
 
     /**
@@ -76,85 +91,17 @@ abstract class AbstractConfig implements ArrayAccess, ConfigInterface, Iterator
     {
         $segs = explode('.', $key);
         $root = &$this->data;
-        $cacheKey = '';
 
         // Look for the key, creating nested keys if needed
         while ($part = array_shift($segs)) {
-            if ($cacheKey != '') {
-                $cacheKey .= '.';
-            }
-            $cacheKey .= $part;
             if (!isset($root[$part]) && count($segs)) {
-                $root[$part] = [];
+                $root[$part] = array();
             }
             $root = &$root[$part];
-
-            //Unset all old nested cache
-            if (isset($this->cache[$cacheKey])) {
-                unset($this->cache[$cacheKey]);
-            }
-
-            //Unset all old nested cache in case of array
-            if (count($segs) == 0) {
-                foreach ($this->cache as $cacheLocalKey => $cacheValue) {
-                    if (substr($cacheLocalKey, 0, strlen($cacheKey)) === $cacheKey) {
-                        unset($this->cache[$cacheLocalKey]);
-                    }
-                }
-            }
         }
 
         // Assign value at target node
         $this->cache[$key] = $root = $value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function has($key)
-    {
-        // Check if already cached
-        if (isset($this->cache[$key])) {
-            return true;
-        }
-
-        $segments = explode('.', $key);
-        $root = $this->data;
-
-        // nested case
-        foreach ($segments as $segment) {
-            if (array_key_exists($segment, $root)) {
-                $root = $root[$segment];
-                continue;
-            } else {
-                return false;
-            }
-        }
-
-        // Set cache for the given key
-        $this->cache[$key] = $root;
-
-        return true;
-    }
-
-    /**
-     * Merge config from another instance
-     *
-     * @param ConfigInterface $config
-     * @return ConfigInterface
-     */
-    public function merge(ConfigInterface $config)
-    {
-        $this->data = array_replace_recursive($this->data, $config->all());
-        return $this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function all()
-    {
-        return $this->data;
     }
 
     /**
@@ -182,7 +129,7 @@ abstract class AbstractConfig implements ArrayAccess, ConfigInterface, Iterator
      */
     public function offsetExists($offset)
     {
-        return $this->has($offset);
+        return !is_null($this->get($offset));
     }
 
     /**
@@ -208,82 +155,5 @@ abstract class AbstractConfig implements ArrayAccess, ConfigInterface, Iterator
     public function offsetUnset($offset)
     {
         $this->set($offset, null);
-    }
-
-    /**
-     * Iterator Methods
-     */
-
-    /**
-     * Returns the data array element referenced by its internal cursor
-     *
-     * @return mixed The element referenced by the data array's internal cursor.
-     *     If the array is empty or there is no element at the cursor, the
-     *     function returns false. If the array is undefined, the function
-     *     returns null
-     */
-    public function current()
-    {
-        return (is_array($this->data) ? current($this->data) : null);
-    }
-
-    /**
-     * Returns the data array index referenced by its internal cursor
-     *
-     * @return mixed The index referenced by the data array's internal cursor.
-     *     If the array is empty or undefined or there is no element at the
-     *     cursor, the function returns null
-     */
-    public function key()
-    {
-        return (is_array($this->data) ? key($this->data) : null);
-    }
-
-    /**
-     * Moves the data array's internal cursor forward one element
-     *
-     * @return mixed The element referenced by the data array's internal cursor
-     *     after the move is completed. If there are no more elements in the
-     *     array after the move, the function returns false. If the data array
-     *     is undefined, the function returns null
-     */
-    public function next()
-    {
-        return (is_array($this->data) ? next($this->data) : null);
-    }
-
-    /**
-     * Moves the data array's internal cursor to the first element
-     *
-     * @return mixed The element referenced by the data array's internal cursor
-     *     after the move is completed. If the data array is empty, the function
-     *     returns false. If the data array is undefined, the function returns
-     *     null
-     */
-    public function rewind()
-    {
-        return (is_array($this->data) ? reset($this->data) : null);
-    }
-
-    /**
-     * Tests whether the iterator's current index is valid
-     *
-     * @return bool True if the current index is valid; false otherwise
-     */
-    public function valid()
-    {
-        return (is_array($this->data) ? key($this->data) !== null : false);
-    }
-
-    /**
-     * Remove a value using the offset as a key
-     *
-     * @param  string $key
-     *
-     * @return void
-     */
-    public function remove($key)
-    {
-        $this->offsetUnset($key);
     }
 }

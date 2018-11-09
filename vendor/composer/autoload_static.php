@@ -10,7 +10,6 @@ class ComposerStaticInit67b45e57623776761610bac5229ae36a
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
-        '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -32,9 +31,7 @@ class ComposerStaticInit67b45e57623776761610bac5229ae36a
         'P' => 
         array (
             'Psr\\SimpleCache\\' => 16,
-            'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
-            'PHPMailer\\PHPMailer\\' => 20,
         ),
         'N' => 
         array (
@@ -42,19 +39,18 @@ class ComposerStaticInit67b45e57623776761610bac5229ae36a
         ),
         'I' => 
         array (
-            'Interop\\Container\\' => 18,
             'Illuminate\\Support\\' => 19,
             'Illuminate\\Database\\' => 20,
             'Illuminate\\Contracts\\' => 21,
             'Illuminate\\Container\\' => 21,
         ),
-        'F' => 
-        array (
-            'FastRoute\\' => 10,
-        ),
         'D' => 
         array (
             'Doctrine\\Common\\Inflector\\' => 26,
+        ),
+        'A' => 
+        array (
+            'Authenticate\\' => 13,
         ),
     );
 
@@ -87,25 +83,13 @@ class ComposerStaticInit67b45e57623776761610bac5229ae36a
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
         ),
-        'Psr\\Http\\Message\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-        ),
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'PHPMailer\\PHPMailer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
-        ),
         'Noodlehaus\\' => 
         array (
             0 => __DIR__ . '/..' . '/hassankhan/config/src',
-        ),
-        'Interop\\Container\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container',
         ),
         'Illuminate\\Support\\' => 
         array (
@@ -123,13 +107,13 @@ class ComposerStaticInit67b45e57623776761610bac5229ae36a
         array (
             0 => __DIR__ . '/..' . '/illuminate/container',
         ),
-        'FastRoute\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/nikic/fast-route/src',
-        ),
         'Doctrine\\Common\\Inflector\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
+        ),
+        'Authenticate\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/Authenticate',
         ),
     );
 
@@ -163,13 +147,17 @@ class ComposerStaticInit67b45e57623776761610bac5229ae36a
                 0 => __DIR__ . '/..' . '/ircmaxell/random-lib/lib',
             ),
         ),
-        'P' => 
-        array (
-            'Pimple' => 
-            array (
-                0 => __DIR__ . '/..' . '/pimple/pimple/src',
-            ),
-        ),
+    );
+
+    public static $classMap = array (
+        'EasyPeasyICS' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/EasyPeasyICS.php',
+        'PHPMailer' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmailer.php',
+        'PHPMailerOAuth' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmaileroauth.php',
+        'PHPMailerOAuthGoogle' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmaileroauthgoogle.php',
+        'POP3' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.pop3.php',
+        'SMTP' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.smtp.php',
+        'ntlm_sasl_client_class' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/ntlm_sasl_client.php',
+        'phpmailerException' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmailer.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -179,6 +167,7 @@ class ComposerStaticInit67b45e57623776761610bac5229ae36a
             $loader->prefixDirsPsr4 = ComposerStaticInit67b45e57623776761610bac5229ae36a::$prefixDirsPsr4;
             $loader->fallbackDirsPsr4 = ComposerStaticInit67b45e57623776761610bac5229ae36a::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit67b45e57623776761610bac5229ae36a::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit67b45e57623776761610bac5229ae36a::$classMap;
 
         }, null, ClassLoader::class);
     }
